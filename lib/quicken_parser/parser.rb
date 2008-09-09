@@ -20,31 +20,34 @@ module QuickenParser
     def accounts
       @accounts = Array.new
       REXML::XPath.each(@doc.root, "//STMTRS") do |xml|
-        currency     = REXML::XPath.first(xml, ".//CURDEF").text
-        bank_id      = REXML::XPath.first(xml, ".//BANKID").text
-        account_id   = REXML::XPath.first(xml, ".//ACCTID").text
-        account_type = REXML::XPath.first(xml, ".//ACCTTYPE").text
-
-        account = Account.new(:currency => currency, :bank_id => bank_id, :number => account_id, :type => account_type, :transactions => Transactions.new)
-
-        xmldatefrom  = REXML::XPath.first(xml, ".//DTSTART").text
-        xmldateto    = REXML::XPath.first(xml, ".//DTEND").text
-        account.transactions.timespan = parse_date(xmldatefrom)..parse_date(xmldateto)
-
-        REXML::XPath.each(xml, ".//STMTTRN") do |xmltxn|
-          type        = REXML::XPath.first(xmltxn, ".//TRNTYPE").text
-          date_posted = REXML::XPath.first(xmltxn, ".//DTPOSTED").text
-          amount      = REXML::XPath.first(xmltxn, ".//TRNAMT").text
-          txnid       = REXML::XPath.first(xmltxn, ".//FITID").text
-          name        = REXML::XPath.first(xmltxn, ".//NAME").text
-          memo        = REXML::XPath.first(xmltxn, ".//MEMO")
-
-          account.transactions << Transaction.new(:type => type, :timestamp => parse_date(date_posted), :amount => "#{account.currency} #{amount}".to_money, :id => txnid, :name => name, :memo => memo ? memo.text : nil)
-        end
-
-        @accounts << account
+        @accounts << account_from_xml(xml)
       end
+
       @accounts
+    end
+
+    def account_from_xml(xml)
+      currency     = REXML::XPath.first(xml, ".//CURDEF").text
+      bank_id      = REXML::XPath.first(xml, ".//BANKID").text
+      account_id   = REXML::XPath.first(xml, ".//ACCTID").text
+      account_type = REXML::XPath.first(xml, ".//ACCTTYPE").text
+
+      account = Account.new(:currency => currency, :bank_id => bank_id, :number => account_id, :type => account_type, :transactions => Transactions.new)
+
+      xmldatefrom  = REXML::XPath.first(xml, ".//DTSTART").text
+      xmldateto    = REXML::XPath.first(xml, ".//DTEND").text
+      account.transactions.timespan = parse_date(xmldatefrom)..parse_date(xmldateto)
+
+      REXML::XPath.each(xml, ".//STMTTRN") do |xmltxn|
+        type        = REXML::XPath.first(xmltxn, ".//TRNTYPE").text
+        date_posted = REXML::XPath.first(xmltxn, ".//DTPOSTED").text
+        amount      = REXML::XPath.first(xmltxn, ".//TRNAMT").text
+        txnid       = REXML::XPath.first(xmltxn, ".//FITID").text
+        name        = REXML::XPath.first(xmltxn, ".//NAME").text
+        memo        = REXML::XPath.first(xmltxn, ".//MEMO")
+
+        account.transactions << Transaction.new(:type => type, :timestamp => parse_date(date_posted), :amount => "#{account.currency} #{amount}".to_money, :id => txnid, :name => name, :memo => memo ? memo.text : nil)
+      end
     end
 
     def parse_date(xmldate)
