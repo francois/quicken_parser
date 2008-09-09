@@ -8,10 +8,9 @@ file / stream.
 
 == Example
 
- objects = QuickenParser.parse(STDIN)
- objects.transactions.length #=> 281
- objects.accounts.length #=> 3
- account = objects.accounts.first
+ accounts = QuickenParser.parse(STDIN)
+ accounts.length #=> 3
+ account = accounts.first
  #=> <QuickenParser::Account ...>
  account.number     #=> "123456789012"
  account.currency   #=> "CAD"
