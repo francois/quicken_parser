@@ -18,6 +18,7 @@ module QuickenParser
     end
 
     def accounts
+      return @account if @account
       @accounts = Array.new
       REXML::XPath.each(@doc.root, "//STMTRS") do |xml|
         @accounts << account_from_xml(xml)
@@ -39,15 +40,17 @@ module QuickenParser
       account.transactions.timespan = parse_date(xmldatefrom)..parse_date(xmldateto)
 
       REXML::XPath.each(xml, ".//STMTTRN") do |xmltxn|
-        type        = REXML::XPath.first(xmltxn, ".//TRNTYPE").text
-        date_posted = REXML::XPath.first(xmltxn, ".//DTPOSTED").text
-        amount      = REXML::XPath.first(xmltxn, ".//TRNAMT").text
-        txnid       = REXML::XPath.first(xmltxn, ".//FITID").text
-        name        = REXML::XPath.first(xmltxn, ".//NAME").text
-        memo        = REXML::XPath.first(xmltxn, ".//MEMO")
+        type        = text_or_nil(xmltxn, ".//TRNTYPE")
+        date_posted = text_or_nil(xmltxn, ".//DTPOSTED")
+        amount      = text_or_nil(xmltxn, ".//TRNAMT")
+        txnid       = text_or_nil(xmltxn, ".//FITID")
+        name        = text_or_nil(xmltxn, ".//NAME")
+        memo        = text_or_nil(xmltxn, ".//MEMO")
 
-        account.transactions << Transaction.new(:type => type, :timestamp => parse_date(date_posted), :amount => "#{account.currency} #{amount}".to_money, :id => txnid, :name => name, :memo => memo ? memo.text : nil)
+        account.transactions << Transaction.new(:type => type, :timestamp => parse_date(date_posted), :amount => "#{account.currency} #{amount}".to_money, :number => txnid, :name => name, :memo => memo)
       end
+
+      account
     end
 
     def parse_date(xmldate)
@@ -86,6 +89,13 @@ module QuickenParser
 
     def remove_sgml_options!
       @input.gsub!(/^[A-Z]+:[0-9A-Z]+$/, "")
+    end
+
+    protected
+    def text_or_nil(root, xpath)
+      if node = REXML::XPath.first(root, xpath) then
+        node.text.chomp.strip
+      end
     end
 
     class UnsupportedEncodingException < RuntimeError; end
