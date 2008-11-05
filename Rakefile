@@ -2,6 +2,7 @@ require 'rubygems'
 require 'rake/gempackagetask'
 require 'rubygems/specification'
 require 'date'
+require "rake/testtask"
 
 GEM = "quicken_parser"
 GEM_VERSION = "0.0.1"
@@ -23,10 +24,11 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
 
   s.add_dependency "money", "~> 1.7"
+  s.add_development_dependency "thoughtbot-shoulda", "~> 2.0"
   
   s.require_path = "lib"
   s.autorequire = GEM
-  s.files = %w(LICENSE README Rakefile TODO) + Dir.glob("{lib,specs}/**/*")
+  s.files = %w(LICENSE README Rakefile TODO) + Dir.glob("{lib,test}/**/*")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
@@ -44,3 +46,11 @@ task :make_spec do
     file.puts spec.to_ruby
   end
 end
+
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose    = true
+end
+
+task :default => :test

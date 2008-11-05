@@ -9,7 +9,7 @@ module QuickenParser
     end
 
     def to_s
-      "%s: %s %s %s" % [timestamp.to_s, type, name, amount.format]
+      "%s: %s %s %s" % [timestamp.to_s, type, name, amount.to_s]
     end
   end
 end

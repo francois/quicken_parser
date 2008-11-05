@@ -1,5 +1,6 @@
 module QuickenParser
   class Transactions
+    include Enumerable
     attr_accessor :timespan
 
     def initialize(args={})
