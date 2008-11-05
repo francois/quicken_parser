@@ -10,6 +10,19 @@ module QuickenParser
       end
     end
 
+    def first
+      @txns.first
+    end
+
+    def last
+      @txns.last
+    end
+
+    def length
+      @txns.length
+    end
+    alias_method :size, :length
+
     def <<(txn)
       @txns << txn
     end

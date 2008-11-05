@@ -18,8 +18,9 @@ class TransactionsTest < Test::Unit::TestCase
     end
 
     should_be Enumerable
-    should_respond_to :<<
-    should_respond_to :each
+    %w(<< each first last length size).each do |method|
+      should_respond_to method
+    end
 
     %w(timespan).each do |attr|
       should_respond_to attr
