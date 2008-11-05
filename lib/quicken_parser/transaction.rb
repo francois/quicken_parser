@@ -1,6 +1,6 @@
 module QuickenParser
   class Transaction
-    attr_accessor :type, :timestamp, :amount, :id, :name, :memo
+    attr_accessor :type, :timestamp, :amount, :number, :name, :memo
 
     def initialize(args={})
       args.each_pair do |key, value|

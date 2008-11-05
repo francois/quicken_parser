@@ -6,7 +6,7 @@ class TransactionTest < Test::Unit::TestCase
       @transaction = QuickenParser::Transaction.new
     end
 
-    %w(type timestamp amount id name memo).each do |attr|
+    %w(type timestamp amount number name memo).each do |attr|
       should_respond_to attr
       should_respond_to "#{attr}="
     end
