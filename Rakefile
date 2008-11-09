@@ -5,7 +5,7 @@ require 'date'
 require "rake/testtask"
 
 GEM = "quicken_parser"
-GEM_VERSION = "0.0.2"
+GEM_VERSION = "0.0.3"
 AUTHOR = "François Beausoleil"
 EMAIL = "francois@teksol.info"
 HOMEPAGE = "http://github.com/francois/quicken_parser"
