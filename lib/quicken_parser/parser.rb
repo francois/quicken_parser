@@ -90,6 +90,8 @@ module QuickenParser
         case match[1]
         when "1252"
           encoding = "windows-1252"
+        when "8859-1"
+          encoding = "ISO-8859-1"
         else
           raise UnsupportedEncodingException, "Could not parse encoding with name #{match[1]}"
         end
