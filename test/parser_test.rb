@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/test_helper"
 
 class ParserTest < Test::Unit::TestCase
-  context "A Quick file with 2 accounts" do
+  context "A Quicken file with 2 accounts" do
     setup do
       @content = fixture(:two_accounts)
       @parser = QuickenParser::Parser.new(@content.dup)
@@ -16,7 +16,7 @@ class ParserTest < Test::Unit::TestCase
       assert @parser.accounts.all? {|account| account.transactions.length == 1}
     end
   end
-  
+
   context "A Quicken file whose transactions don't have memos" do
     setup do
       @content = fixture(:no_memo)
@@ -28,6 +28,56 @@ class ParserTest < Test::Unit::TestCase
 
     should "return nil as the memo on the transaction" do
       assert_nil @transaction.memo
+    end
+  end
+
+  context "A Quicken file with one credit card" do
+    setup do
+      @content = fixture(:one_cc)
+    end
+
+    context "that was parsed" do
+      setup do
+        @parser = QuickenParser::Parser.new(@content.dup)
+        @parser.parse
+        @account = @parser.accounts.first
+      end
+
+
+      should "have a single account" do
+        assert_equal 1, @parser.accounts.length
+      end
+
+      should "have no bank ID" do
+        assert_nil @account.bank_id
+      end
+
+      should "be from account 4510912839238" do
+        assert_equal "4510912839238", @account.number
+      end
+
+      should "be a credit card account" do
+        assert_equal "CREDITCARD", @account.type
+      end
+
+      should "return 'CAD' as the currency" do
+        assert_equal "CAD", @account.currency
+      end
+
+      should "have a single transaction" do
+        assert_equal 1, @account.transactions.length
+      end
+
+      should "have transactions covering 2008-07-08 noon to 2008-10-28 noon" do
+        span = Time.local(2008, 7, 8, 12, 0, 0) .. Time.local(2008, 10, 28, 12, 0, 0)
+        assert_equal span, @account.transactions.timespan
+      end
+
+      context "the transaction" do
+        setup do
+          @transaction = @account.transactions.first
+        end
+      end
     end
   end
 

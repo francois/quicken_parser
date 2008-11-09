@@ -6,6 +6,7 @@ module QuickenParser
       args.each_pair do |key, value|
         send("#{key}=", value)
       end
+      @transactions = Transactions.new
     end
 
     def to_s

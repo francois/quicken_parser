@@ -24,7 +24,20 @@ module QuickenParser
         @accounts << account_from_xml(xml)
       end
 
+      REXML::XPath.each(@doc.root, "//CCSTMTRS") do |xml|
+        @accounts << cc_account_from_xml(xml)
+      end
+
       @accounts
+    end
+
+    def cc_account_from_xml(xml)
+      currency     = REXML::XPath.first(xml, ".//CURDEF").text
+      bank_id      = nil
+      account_id   = REXML::XPath.first(xml, ".//ACCTID").text
+      account_type = "CREDITCARD"
+
+      build_account_details(xml, :currency => currency, :bank_id => bank_id, :number => account_id, :type => account_type)
     end
 
     def account_from_xml(xml)
@@ -33,7 +46,11 @@ module QuickenParser
       account_id   = REXML::XPath.first(xml, ".//ACCTID").text
       account_type = REXML::XPath.first(xml, ".//ACCTTYPE").text
 
-      account = Account.new(:currency => currency, :bank_id => bank_id, :number => account_id, :type => account_type, :transactions => Transactions.new)
+      build_account_details(xml, :currency => currency, :bank_id => bank_id, :number => account_id, :type => account_type)
+    end
+    
+    def build_account_details(xml, params={})
+      account = Account.new(params)
 
       xmldatefrom  = REXML::XPath.first(xml, ".//DTSTART").text
       xmldateto    = REXML::XPath.first(xml, ".//DTEND").text
