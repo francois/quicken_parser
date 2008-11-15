@@ -27,7 +27,6 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency "thoughtbot-shoulda", "~> 2.0"
   
   s.require_path = "lib"
-  s.autorequire = GEM
   s.files = %w(LICENSE README Rakefile TODO) + Dir.glob("{lib,test}/**/*")
 end
 
