@@ -83,23 +83,27 @@ module QuickenParser
       @input.gsub!("\r", "\n")
     end
 
-    def add_xml_decl!
-      encoding = nil
-      match = @input.match(/CHARSET:(.+)/)
-      if match then
-        case match[1]
-        when "1252"
-          encoding = "windows-1252"
-        when "8859-1"
-          encoding = "ISO-8859-1"
+    ASCII = (32..127).to_a + [10, 13, 9]
+
+    # Transform anything to ASCII/UTF-8.  This is bad, and loses valuable information,
+    # but hey, I want something that works NOW, rather than something that might
+    # work in 20 years...
+    def add_xml_decl! #:nodoc:
+      converted = @input.unpack("C*").map do |c|
+        if ASCII.include?(c) then
+          c
         else
-          raise UnsupportedEncodingException, "Could not parse encoding with name #{match[1]}"
+          case c
+          when 233; ?e
+          when 244; ?o
+          else
+            ?_
+          end
         end
-      else
-        encoding = "US-ASCII"
       end
 
-      @input = "<?xml version=\"1.0\" encoding=\"#{encoding}\"?>\n#{@input}"
+      @input = converted.pack("C*")
+      @input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{@input}"
     end
 
     def close_sgml_decl!
