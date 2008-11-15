@@ -107,7 +107,7 @@ module QuickenParser
     end
 
     def remove_sgml_options!
-      @input.gsub!(/^[A-Z]+:[0-9A-Z]+$/, "")
+      @input.gsub!(/^[A-Z]+:[-0-9A-Z]+$/, "")
     end
 
     protected
