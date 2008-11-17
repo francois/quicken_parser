@@ -94,10 +94,10 @@ module QuickenParser
           c
         else
           case c
-          when 233; ?e
-          when 244; ?o
-          else
-            ?_
+          when 168, 170, 233;   ?e
+          when 195;             nil
+          when 244;             ?o
+          else;                 ?_
           end
         end
       end
