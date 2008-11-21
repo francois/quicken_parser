@@ -5,7 +5,7 @@ require 'date'
 require "rake/testtask"
 
 GEM = "quicken_parser"
-GEM_VERSION = "0.1.1"
+GEM_VERSION = "0.1.2"
 AUTHOR = "François Beausoleil"
 EMAIL = "francois@teksol.info"
 HOMEPAGE = "http://github.com/francois/quicken_parser"
@@ -24,7 +24,7 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
 
   s.add_dependency "francois-money", "~> 2.0.0.1"
-  s.add_development_dependency "thoughtbot-shoulda", "~> 2.0"
+  s.add_development_dependency "francois-shoulda", "~> 2.0"
 
   s.require_path = "lib"
   s.files = %w(LICENSE README Rakefile TODO) + Dir.glob("{lib,test}/**/*")
