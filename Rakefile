@@ -23,7 +23,7 @@ spec = Gem::Specification.new do |s|
   s.email = EMAIL
   s.homepage = HOMEPAGE
 
-  s.add_dependency "money", "~> 1.7"
+  s.add_dependency "francois-money", "~> 2.0.0.1"
   s.add_development_dependency "thoughtbot-shoulda", "~> 2.0"
 
   s.require_path = "lib"
