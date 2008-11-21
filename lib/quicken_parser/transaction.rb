@@ -7,7 +7,7 @@ module QuickenParser
         send("#{key}=", value)
       end
 
-      memo = nil if name.to_s.strip == memo.to_s.strip
+      @memo = nil if @name.to_s.strip == @memo.to_s.strip
     end
 
     def to_s

@@ -17,7 +17,12 @@ class TransactionTest < Test::Unit::TestCase
       @transaction = QuickenParser::Transaction.new(:name => "FONDUE FOLIE SHERBROOKE QC", :memo => "FONDUE FOLIE SHERBROOKE QC")
     end
 
-    should_change "@transaction.memo", :to => nil
-    should_not_change "@transaction.name"
+    should "NOT change the name" do
+      assert_equal "FONDUE FOLIE SHERBROOKE QC", @transaction.name
+    end
+
+    should "set the memo to nil" do
+      assert_nil @transaction.memo
+    end
   end
 end
