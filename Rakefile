@@ -23,7 +23,7 @@ spec = Gem::Specification.new do |s|
   s.email = EMAIL
   s.homepage = HOMEPAGE
 
-  s.add_dependency "francois-money", "~> 2.0.0.1"
+  s.add_dependency "FooBarWidget-money", "~> 2"
   s.add_development_dependency "francois-shoulda", "~> 2.0"
 
   s.require_path = "lib"
