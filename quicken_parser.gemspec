@@ -1,8 +1,10 @@
 # -*- encoding: utf-8 -*-
+$:.unshift File.expand_path("../lib", __FILE__)
+require "quicken_parser/version"
 
 Gem::Specification.new do |s|
   s.name = %q{quicken_parser}
-  s.version = "0.1.5"
+  s.version = QuickenParser::VERSION
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Fran\303\247ois Beausoleil"]
