@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'rake/gempackagetask'
 require 'rubygems/specification'
 require 'date'
 require "rake/testtask"
@@ -28,10 +27,6 @@ spec = Gem::Specification.new do |s|
 
   s.require_path = "lib"
   s.files = %w(LICENSE README Rakefile TODO) + Dir.glob("{lib,test}/**/*")
-end
-
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.gem_spec = spec
 end
 
 desc "install the gem locally"

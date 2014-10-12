@@ -1,7 +1,6 @@
 require "rubygems"
 require "test/unit"
 
-gem "thoughtbot-shoulda", "~> 2.0.5"
 require "shoulda"
 
 $:.unshift File.dirname(__FILE__) + "/../lib"
