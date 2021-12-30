@@ -4,7 +4,8 @@ require "time"
 module QuickenParser
   class Parser #:nodoc:
     def initialize(source)
-      @input = source.respond_to?(:read) ? source.read : source
+      @input = source.respond_to?(:read) ? source.read :
+        File.exists?(source) ? File.open(source).read : source
     end
 
     def parse
