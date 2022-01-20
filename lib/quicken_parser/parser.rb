@@ -32,6 +32,33 @@ module QuickenParser
       @accounts
     end
 
+    def metadata
+      # Note: I expect only one of these:
+      REXML::XPath.each(@doc.root, "//SONRS") do |xml|
+	@metadata = metadata_from_xml(xml)
+      end
+      @metadata
+    end
+
+    def metadata_from_xml(xml)
+      # https://schemas.liquid-technologies.com/ofx/2.1.1/?page=sonrs.html
+      {
+	status: {
+	  code: REXML::XPath.first(xml, ".//STATUS/CODE").text,
+	  severity: REXML::XPath.first(xml, ".//STATUS/SEVERITY").text,
+	},
+	server_date: Time.parse(REXML::XPath.first(xml, ".//DTSERVER").text + "Z"),
+	lang: REXML::XPath.first(xml, ".//LANGUAGE").text,
+	profile_date: Time.parse(REXML::XPath.first(xml, ".//DTPROFUP").text + "Z"),
+	financial_institution: {
+	  name: REXML::XPath.first(xml, ".//FI/ORG").text,
+	  id: REXML::XPath.first(xml, ".//FI/FID").text,
+	},
+	# Not in the above-linked spec, but seen in a QFX file:
+	user: REXML::XPath.first(xml, ".//INTU.USERID").text,
+      }
+    end
+
     def cc_account_from_xml(xml)
       currency     = REXML::XPath.first(xml, ".//CURDEF").text
       bank_id      = nil
